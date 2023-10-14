@@ -1,6 +1,6 @@
 from config.loader import bot
 from keyboards import reply, inline
-
+from utils.reader_files import file_reader
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
@@ -10,4 +10,5 @@ def send_welcome(message):
 
 @bot.message_handler(commands=['help'])
 def send_keyboard(message):
-    bot.send_message(message.chat.id, 'Вот ваша клава', reply_markup=reply.my_keyb)
+    text = file_reader('second.txt')
+    bot.send_message(message.chat.id, text)
