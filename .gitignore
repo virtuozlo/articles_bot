@@ -1,5 +1,6 @@
 config/my_config.py
 *env
+*.db
 about.txt
 # Byte-compiled / optimized / DLL files
 __pycache__/
