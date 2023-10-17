@@ -8,6 +8,7 @@ def print_hi(name):  # Use a breakpoint in the code line below to debug your scr
 
 
 if __name__ == '__main__':
+    bot.delete_webhook()
     print_hi('PyCharm')
     set_default_commands(bot)
     bind_filters(bot)
