@@ -1,4 +1,4 @@
-from config.loader import bot, db_user
+from config.loader import bot
 from keyboards.kb_filters import *
 from keyboards.menu_inline_kb import create_buttons_federal_menu
 from utils.reader_files import file_reader
@@ -12,9 +12,6 @@ def go_prev(call):
     :param call:
     :return:
     """
-    if not db_user.check_user(call.from_user.id):
-        db_user.add_user(call.from_user.id)
-        logger.error(f'user_id: {call.from_user.id}')
     logger.info(' ')
     data = for_start.parse(callback_data=call.data)
     text = 'Выберете документ'
@@ -43,9 +40,6 @@ def start_federal_menu(call):
     :param call: Выбор - федеральный кодекс
     :return: Перевод на меня выбора глав
     """
-    if not db_user.check_user(call.from_user.id):
-        db_user.add_user(call.from_user.id)
-        logger.error(f'user_id: {call.from_user.id}')
     logger.info(' ')
     action = for_menu_action.parse(call.data)
     bot.send_message(call.message.chat.id, f'Выберете главу',
@@ -62,9 +56,6 @@ def get_federal_rules_part(call):
     :param call: Выбор - глава ФЗ
     :return:
     """
-    if not db_user.check_user(call.from_user.id):
-        db_user.add_user(call.from_user.id)
-        logger.error(f'user_id: {call.from_user.id}')
     logger.info(' ')
     callback_data = for_menu_part.parse(callback_data=call.data)
     bot.send_message(call.message.chat.id, f'Выберете Статью',
@@ -83,9 +74,6 @@ def get_some_article(call):
     :param call: Все интересующие данные пути до статьи
     :return:
     """
-    if not db_user.check_user(call.from_user.id):
-        db_user.add_user(call.from_user.id)
-        logger.error(f'user_id: {call.from_user.id}')
     logger.info(' ')
     callback_data = for_menu_article.parse(callback_data=call.data)
     action, part, article = callback_data['action'], callback_data['part'], callback_data['article']
