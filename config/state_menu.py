@@ -10,6 +10,7 @@ state_storage = StateMemoryStorage()
 class MenuStates(StatesGroup):
     """
     State класс для команды history
+
     """
     start = State()
     federal_rules = State()
