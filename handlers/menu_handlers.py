@@ -2,6 +2,7 @@ from config.loader import bot
 from keyboards.kb_filters import *
 from keyboards.menu_inline_kb import create_buttons_federal_menu
 from utils.reader_files import file_reader
+from config.logger import logger
 
 
 @bot.callback_query_handler(func=None, start_config=for_start.filter())
@@ -11,6 +12,7 @@ def go_prev(call):
     :param call:
     :return:
     """
+    logger.info(' ')
     data = for_start.parse(callback_data=call.data)
     text = 'Выберете документ'
     #  Заменить str на bool
@@ -38,6 +40,7 @@ def start_federal_menu(call):
     :param call: Выбор - федеральный кодекс
     :return: Перевод на меня выбора глав
     """
+    logger.info(' ')
     action = for_menu_action.parse(call.data)
     bot.send_message(call.message.chat.id, f'Выберете главу',
                      reply_markup=create_buttons_federal_menu(**{'action': action['action'],
@@ -53,6 +56,7 @@ def get_federal_rules_part(call):
     :param call: Выбор - глава ФЗ
     :return:
     """
+    logger.info(' ')
     callback_data = for_menu_part.parse(callback_data=call.data)
     bot.send_message(call.message.chat.id, f'Выберете Статью',
                      reply_markup=create_buttons_federal_menu(**{'action': callback_data['action'],
@@ -70,6 +74,7 @@ def get_some_article(call):
     :param call: Все интересующие данные пути до статьи
     :return:
     """
+    logger.info(' ')
     callback_data = for_menu_article.parse(callback_data=call.data)
     action, part, article = callback_data['action'], callback_data['part'], callback_data['article']
     answer = ''

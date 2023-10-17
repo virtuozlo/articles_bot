@@ -1,5 +1,4 @@
-from pprint import pprint
-
+from config.logger import logger
 from telebot import AdvancedCustomFilter, types
 from telebot.callback_data import CallbackData, CallbackDataFilter
 
@@ -13,6 +12,7 @@ class AnyActions(AdvancedCustomFilter):
     """
     Разбирает любой call кнопок при заданном фильтре
     """
+    logger.info(' ')
     key = 'check_config'
 
     def check(self, call: types.CallbackQuery, config: CallbackDataFilter):
@@ -23,6 +23,7 @@ class StartActions(AdvancedCustomFilter):
     """
     Разбирает выбор пользователя на команду старт
     """
+    logger.info(' ')
     key = 'start_config'
 
     def check(self, call: types.CallbackQuery, config: CallbackDataFilter):

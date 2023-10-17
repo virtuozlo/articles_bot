@@ -1,7 +1,13 @@
-# MY_TOKEN = '5382887020:AAE9wa-YnhMEblpULd8J8kU_hZfBuSFViNY'  # общий
-MY_TOKEN = '1973846714:AAF_26uFq1u68ZwVIrwVVsjGRjsymkKM4qA'
+from dotenv import load_dotenv, find_dotenv
+from .logger import logger
 MY_COMMANDS = (
     ('start', 'Запустить бота'),
     ('help', 'Помощь')
 )
-PATH_TO_FILES = r'C:\Users\Иван\Desktop\bot_work\text_files\\'
+
+if not find_dotenv():
+    logger.error()
+    exit('Переменные окружения не загружены т.к отсутствует файл .env')
+else:
+    logger.info(f'{logger.name}')
+    load_dotenv()

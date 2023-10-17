@@ -1,4 +1,5 @@
 import telebot.types
+from config.logger import logger
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 from .kb_filters import for_menu_action, for_menu_article, for_menu_part, for_start
 from utils.reader_files import directions_list
@@ -14,7 +15,8 @@ def buttons_choose(action, part, article, **kwargs):
     :param kwargs: Будет принимать action, part and article и думать какую callbackData вызывать
     :return: list of buttons
     """
-    path = ''
+    logger.info(' ')
+    path = '/'
     factory = for_menu_action
     if action:
         path += action
@@ -49,6 +51,7 @@ def create_buttons_federal_menu(**kwargs) -> telebot.types.InlineKeyboardMarkup:
     """
     Создать кнопки для команды ФЗ
     """
+    logger.info(' ')
     keyboard = InlineKeyboardMarkup(row_width=2)
     buttons = buttons_choose(kwargs['action'], kwargs['part'], kwargs['article'])
     keyboard.add(*buttons)

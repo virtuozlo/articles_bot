@@ -3,11 +3,11 @@
 """
 import telebot
 from telebot import custom_filters
-
+import os
 from keyboards.kb_filters import StartActions, AnyActions
 from . import my_config
 
-bot = telebot.TeleBot(my_config.MY_TOKEN, parse_mode=None)
+bot = telebot.TeleBot(os.getenv('MY_TOKEN'), parse_mode=None)
 
 
 def bind_filters(bot: telebot.TeleBot):
