@@ -1,4 +1,4 @@
-from config.loader import bot
+from config.loader import bot, bind_filters
 from config.set_default_commands import set_default_commands
 import handlers
 
@@ -10,4 +10,5 @@ def print_hi(name):  # Use a breakpoint in the code line below to debug your scr
 if __name__ == '__main__':
     print_hi('PyCharm')
     set_default_commands(bot)
+    bind_filters(bot)
     bot.infinity_polling()
