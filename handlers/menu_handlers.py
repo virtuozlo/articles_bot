@@ -1,6 +1,6 @@
 from config.loader import bot
 from keyboards.kb_filters import *
-from keyboards.menu_inline_kb import create_buttons_federal_menu
+from keyboards.menu_inline_kb import create_buttons_federal_menu, get_button_prev
 from utils.reader_files import file_reader, get_msg
 from config.logger import logger
 from telebot.types import CallbackQuery
@@ -28,10 +28,11 @@ def go_prev(call: CallbackQuery):
     elif tmp.count(False) == 1:  # Добавить шаг назад (изменить часть на false)
         data['part'] = False
         text = 'Выберете главу'
-    bot.send_message(chat_id, text, parse_mode='HTML',reply_markup=create_buttons_federal_menu(**{'action': data['action'],
-                                                                                'part': data['part'],
-                                                                                'article': data[
-                                                                                    'article']}))
+    bot.send_message(chat_id, text, parse_mode='HTML',
+                     reply_markup=create_buttons_federal_menu(**{'action': data['action'],
+                                                                 'part': data['part'],
+                                                                 'article': data[
+                                                                     'article']}))
     bot.delete_message(chat_id, message_id)
 
 
@@ -45,7 +46,7 @@ def start_federal_menu(call: CallbackQuery):
     message, user_id, chat_id, message_id = get_msg(call, True)
     logger.info(' ')
     action = for_menu_action.parse(call.data)
-    bot.send_message(chat_id, f'Выберете главу',parse_mode='HTML',
+    bot.send_message(chat_id, f'Выберете главу', parse_mode='HTML',
                      reply_markup=create_buttons_federal_menu(**{'action': action['action'],
                                                                  'part': False,
                                                                  'article': False}))
@@ -62,7 +63,7 @@ def get_federal_rules_part(call: CallbackQuery):
     message, user_id, chat_id, message_id = get_msg(call, True)
     logger.info(' ')
     callback_data = for_menu_part.parse(callback_data=call.data)
-    bot.send_message(chat_id, f'Выберете Статью',parse_mode='HTML',
+    bot.send_message(chat_id, f'Выберете Статью', parse_mode='HTML',
                      reply_markup=create_buttons_federal_menu(**{'action': callback_data['action'],
                                                                  'part': callback_data['part'],
                                                                  'article': False
@@ -90,10 +91,8 @@ def get_some_article(call: CallbackQuery):
     finally:
         if not answer:
             answer = 'Файл пока пуст. Жди и посмотри что-то другое'
-        bot.send_message(chat_id, answer,parse_mode='HTML',)
-        bot.send_message(chat_id, f'Выберете Статью',
-                         reply_markup=create_buttons_federal_menu(**{'action': action,
-                                                                     'part': part,
-                                                                     'article': False
-                                                                     }))
-    bot.delete_message(chat_id, message_id)
+        bot.send_message(chat_id, answer, parse_mode='HTML', )
+        bot.send_message(chat_id, f'Клик',
+                         reply_markup=get_button_prev(action, part, False))
+        logger.info(str(action))
+        bot.delete_message(chat_id, message_id)
