@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import telebot.types
 from config.logger import logger
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
@@ -15,8 +17,8 @@ def get_button_prev(action, part, article):
     """
     kb = InlineKeyboardMarkup()
     kb.add(*[InlineKeyboardButton('Назад', callback_data=for_start.new(action=action,
-                                                                     part=part,
-                                                                     article=article))])
+                                                                       part=part,
+                                                                       article=article))])
     return kb
 
 
@@ -42,7 +44,8 @@ def buttons_choose(action, part, article, **kwargs):
     if article:
         factory = for_menu_article
         path += '/' + article
-    folder = directions_list(path)
+    print(action, part, article, type(action), type(part), type(article))
+    description, folder = directions_list(path)
     buttons = []
     for button in folder:
         # Если первое вхождение (всё пустое), то присвоить
@@ -55,19 +58,20 @@ def buttons_choose(action, part, article, **kwargs):
                                                                    part=part_button,
                                                                    article=article_button))
         )
+    print(action, part, article, type(action), type(part), type(article))
     buttons.append(
         InlineKeyboardButton('Назад', callback_data=for_start.new(action=action,
                                                                   part=part,
                                                                   article=article)))
-    return buttons
+    return description, buttons
 
 
-def create_buttons_federal_menu(**kwargs) -> telebot.types.InlineKeyboardMarkup:
+def create_buttons_federal_menu(**kwargs) -> Tuple[str, telebot.types.InlineKeyboardMarkup]:
     """
     Создать кнопки для команды ФЗ
     """
     logger.info(' ')
     keyboard = InlineKeyboardMarkup()
-    buttons = buttons_choose(kwargs['action'], kwargs['part'], kwargs['article'])
+    description, buttons = buttons_choose(kwargs['action'], kwargs['part'], kwargs['article'])
     keyboard.add(*buttons)
-    return keyboard
+    return description, keyboard

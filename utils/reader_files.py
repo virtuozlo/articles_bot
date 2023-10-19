@@ -13,7 +13,6 @@ def get_msg(msg: Union[Message, CallbackQuery], call: bool = False) -> Tuple[Mes
     :return:
     """
     msg = msg.message if call else msg
-    print(type(msg))
     user_id = msg.from_user.id
     chat_id = msg.chat.id
     message_id = msg.id
@@ -32,11 +31,15 @@ def file_reader(filename: str):
     return read_data
 
 
-def directions_list(dir_name: str) -> List:
+def directions_list(dir_name: str) -> Tuple:
     """
     Выведет все файлы / папки указанного пути
     :param dir_name: Путь к директории
     :return:
     """
     logger.info(' ')
-    return os.listdir(f'{os.getenv("PATH_TO_FILES") + dir_name}')
+    tmp_dir_lst = os.listdir(f'{os.getenv("PATH_TO_FILES") + dir_name}')  # Все файлы директории
+    dir_lst = [i for i in tmp_dir_lst if i != 'description']
+    description = [i for i in tmp_dir_lst if i == 'description']
+    description = file_reader(dir_name + '/' + description[0])
+    return description, dir_lst
