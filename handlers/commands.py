@@ -16,7 +16,7 @@ def send_welcome(message: Message):
     message, user_id, chat_id, message_id = get_msg(message)
     logger.info(' ')
     bot.set_state(message.from_user.id, MenuStates.start, message.chat.id)
-    bot.send_message(chat_id, 'Выберите раздел',
+    bot.send_message(chat_id, 'Выберите раздел',parse_mode='HTML',
                      reply_markup=menu_inline_kb.create_buttons_federal_menu(**{'action': False,
                                                                                 'part': False,
                                                                                 'article': False}))

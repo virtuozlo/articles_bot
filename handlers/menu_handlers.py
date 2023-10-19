@@ -28,7 +28,7 @@ def go_prev(call: CallbackQuery):
     elif tmp.count(False) == 1:  # Добавить шаг назад (изменить часть на false)
         data['part'] = False
         text = 'Выберете главу'
-    bot.send_message(chat_id, text, reply_markup=create_buttons_federal_menu(**{'action': data['action'],
+    bot.send_message(chat_id, text, parse_mode='HTML',reply_markup=create_buttons_federal_menu(**{'action': data['action'],
                                                                                 'part': data['part'],
                                                                                 'article': data[
                                                                                     'article']}))
@@ -45,7 +45,7 @@ def start_federal_menu(call: CallbackQuery):
     message, user_id, chat_id, message_id = get_msg(call, True)
     logger.info(' ')
     action = for_menu_action.parse(call.data)
-    bot.send_message(chat_id, f'Выберете главу',
+    bot.send_message(chat_id, f'Выберете главу',parse_mode='HTML',
                      reply_markup=create_buttons_federal_menu(**{'action': action['action'],
                                                                  'part': False,
                                                                  'article': False}))
@@ -62,7 +62,7 @@ def get_federal_rules_part(call: CallbackQuery):
     message, user_id, chat_id, message_id = get_msg(call, True)
     logger.info(' ')
     callback_data = for_menu_part.parse(callback_data=call.data)
-    bot.send_message(chat_id, f'Выберете Статью',
+    bot.send_message(chat_id, f'Выберете Статью',parse_mode='HTML',
                      reply_markup=create_buttons_federal_menu(**{'action': callback_data['action'],
                                                                  'part': callback_data['part'],
                                                                  'article': False
@@ -90,7 +90,7 @@ def get_some_article(call: CallbackQuery):
     finally:
         if not answer:
             answer = 'Файл пока пуст. Жди и посмотри что-то другое'
-        bot.send_message(chat_id, answer)
+        bot.send_message(chat_id, answer,parse_mode='HTML',)
         bot.send_message(chat_id, f'Выберете Статью',
                          reply_markup=create_buttons_federal_menu(**{'action': action,
                                                                      'part': part,

@@ -5,6 +5,21 @@ from .kb_filters import for_menu_action, for_menu_article, for_menu_part, for_st
 from utils.reader_files import directions_list
 
 
+def get_button_prev(action, part, article):
+    """
+
+    :param action:
+    :param part:
+    :param article:
+    :return: preview button
+    """
+    kb = InlineKeyboardMarkup()
+    kb.add(*[InlineKeyboardButton('Назад', callback_data=for_start.new(action=action,
+                                                                     part=part,
+                                                                     article=article))])
+    return kb
+
+
 def buttons_choose(action, part, article, **kwargs):
     """
     Проходится по каждому данному параметру. Собирает path для функции, которая дает файлы в этом path
