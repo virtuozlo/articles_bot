@@ -58,7 +58,6 @@ def buttons_choose(action, part, article, **kwargs):
                                                                    part=part_button,
                                                                    article=article_button))
         )
-    print(action, part, article, type(action), type(part), type(article))
     buttons.append(
         InlineKeyboardButton('Назад', callback_data=for_start.new(action=action,
                                                                   part=part,
