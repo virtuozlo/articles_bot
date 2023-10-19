@@ -44,7 +44,6 @@ def buttons_choose(action, part, article, **kwargs):
     if article:
         factory = for_menu_article
         path += '/' + article
-    print(action, part, article, type(action), type(part), type(article))
     description, folder = directions_list(path)
     buttons = []
     for button in folder:
