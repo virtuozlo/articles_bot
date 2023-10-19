@@ -52,7 +52,7 @@ def create_buttons_federal_menu(**kwargs) -> telebot.types.InlineKeyboardMarkup:
     Создать кнопки для команды ФЗ
     """
     logger.info(' ')
-    keyboard = InlineKeyboardMarkup(row_width=2)
+    keyboard = InlineKeyboardMarkup()
     buttons = buttons_choose(kwargs['action'], kwargs['part'], kwargs['article'])
     keyboard.add(*buttons)
     return keyboard
