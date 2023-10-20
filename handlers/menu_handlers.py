@@ -22,9 +22,13 @@ def go_prev(call: CallbackQuery):
             data[i] = False
     tmp = [data[i] for i in data if data[i] != 'rules']  # Посчитать false,
     if tmp.count(False) == 2:  # Добавить шаг назад (изменить документ на false)
+        print('here')
         data['action'] = False
     elif tmp.count(False) == 1:  # Добавить шаг назад (изменить часть на false)
+        print('not here')
         data['part'] = False
+    elif not tmp.count(False):
+        data['article'] = False
     description, keyboard = create_buttons_federal_menu(**{'action': data['action'],
                                                            'part': data['part'],
                                                            'article': data[
@@ -95,6 +99,6 @@ def get_some_article(call: CallbackQuery):
             answer = 'Файл пока пуст. Жди и посмотри что-то другое'
         bot.send_message(chat_id, answer, parse_mode='HTML', )
         bot.send_message(chat_id, f'Клик',
-                         reply_markup=get_button_prev(action, part, 'False'))
+                         reply_markup=get_button_prev(action, part, article))
         logger.info(str(action))
         bot.delete_message(chat_id, message_id)
