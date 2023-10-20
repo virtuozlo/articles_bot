@@ -22,10 +22,8 @@ def go_prev(call: CallbackQuery):
             data[i] = False
     tmp = [data[i] for i in data if data[i] != 'rules']  # Посчитать false,
     if tmp.count(False) == 2:  # Добавить шаг назад (изменить документ на false)
-        print('here')
         data['action'] = False
     elif tmp.count(False) == 1:  # Добавить шаг назад (изменить часть на false)
-        print('not here')
         data['part'] = False
     elif not tmp.count(False):
         data['article'] = False
