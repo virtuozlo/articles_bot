@@ -1,3 +1,5 @@
+text_files
+photo
 config/my_config.py
 *env
 *.db
