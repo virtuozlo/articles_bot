@@ -12,7 +12,7 @@ def send_welcome(message: Message) -> None:
     :param message:
     """
     message, user_id, chat_id, message_id = get_msg(message)
-    logger.info(' ')
+    logger.info(f'{user_id}')
     description, keyboard = create_buttons_federal_menu('/')
     bot.send_message(chat_id, description, parse_mode='HTML',
                      reply_markup=keyboard)

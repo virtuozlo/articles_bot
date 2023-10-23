@@ -1,4 +1,4 @@
-from typing import Tuple, List, Optional, Union
+from typing import Tuple, List, Optional
 
 import telebot.types
 from config.logger import logger
@@ -56,9 +56,9 @@ def create_buttons_federal_menu(path) -> Tuple[str, telebot.types.InlineKeyboard
     """
     logger.info(' ')
     keyboard = InlineKeyboardMarkup()
-    description, buttons = buttons_choose(path)
-    prev_button = get_button_prev(path)
+    description, buttons = buttons_choose(path)  # Вернет desr - Общая информация для кнопок либо текст из файла
+    prev_button = get_button_prev(path)  # Кнопка "назад" В той функции решает нужна она или нет и какая будет
     keyboard.add(*buttons)
-    if prev_button:
-        keyboard.add(*prev_button)
+    if prev_button:  # Если есть необходимость
+        keyboard.add(*prev_button)  # то добавить
     return description, keyboard
