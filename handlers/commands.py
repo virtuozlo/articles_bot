@@ -1,25 +1,19 @@
 from config.loader import bot
-from config.state_menu import MenuStates
-from keyboards import menu_inline_kb
 from config.logger import logger
 from keyboards.menu_inline_kb import create_buttons_federal_menu
-from utils.reader_files import get_msg
+from utils.other_utils import get_msg
 from telebot.types import Message
 
 
 @bot.message_handler(commands=['start'])
-def send_welcome(message: Message):
+def send_welcome(message: Message) -> None:
     """
-    Отправляет пользователя к выбору раздела
+    Отправляет в фабрику кнопок path в виде '/', что означает выбрать первую директорию
     :param message:
-    :return:
     """
     message, user_id, chat_id, message_id = get_msg(message)
     logger.info(' ')
-    bot.set_state(message.from_user.id, MenuStates.start, message.chat.id)
-    description, keyboard = create_buttons_federal_menu(**{'action': False,
-                                                           'part': False,
-                                                           'article': False})
+    description, keyboard = create_buttons_federal_menu('/')
     bot.send_message(chat_id, description, parse_mode='HTML',
                      reply_markup=keyboard)
 
