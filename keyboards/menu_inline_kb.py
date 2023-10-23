@@ -1,16 +1,27 @@
-from typing import Tuple, List, Optional
+from typing import Tuple, List, Optional, Union
 
 import telebot.types
 from config.logger import logger
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
-from .kb_filters import for_start
+from .kb_filters import for_start, for_photo
 from utils.reader_files import directions_list
+
+
+def get_button_photo(path: str) -> List[InlineKeyboardButton]:
+    """
+    Создать кнопку получения фото с CallBackData для фото
+    :param path:
+    :return:
+    """
+    return [InlineKeyboardButton('Загрузить фото', callback_data=for_photo.new(path_dir=path))]
 
 
 def get_button_prev(path: str) -> Optional[List[telebot.types.InlineKeyboardButton]]:
     """
     Делает из path - list. Если он не пуст, то pop последний аргумент и снова сделать строку
     Даже если список пуст, вернёт '/'
+    :param path: Текущий путь
+    :param message_id: id сообщения с фото. Отправлен кнопкой "назад" из callback с фото
     :return: preview button
     """
     path = [i for i in path.split('/') if i]
