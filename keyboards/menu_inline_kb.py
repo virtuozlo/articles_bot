@@ -3,14 +3,25 @@ from typing import Tuple, List, Optional
 import telebot.types
 from config.logger import logger
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
-from .kb_filters import for_start
+from .kb_filters import for_start, for_photo
 from utils.reader_files import directions_list
+
+
+def get_button_photo(path: str) -> List[InlineKeyboardButton]:
+    """
+    Создать кнопку получения фото с CallBackData для фото
+    :param path:
+    :return:
+    """
+    return [InlineKeyboardButton('Загрузить фото', callback_data=for_photo.new(path_dir=path))]
 
 
 def get_button_prev(path: str) -> Optional[List[telebot.types.InlineKeyboardButton]]:
     """
     Делает из path - list. Если он не пуст, то pop последний аргумент и снова сделать строку
     Даже если список пуст, вернёт '/'
+    :param path: Текущий путь
+    :param message_id: id сообщения с фото. Отправлен кнопкой "назад" из callback с фото
     :return: preview button
     """
     path = [i for i in path.split('/') if i]
@@ -45,9 +56,9 @@ def create_buttons_federal_menu(path) -> Tuple[str, telebot.types.InlineKeyboard
     """
     logger.info(' ')
     keyboard = InlineKeyboardMarkup()
-    description, buttons = buttons_choose(path)
-    prev_button = get_button_prev(path)
+    description, buttons = buttons_choose(path)  # Вернет desr - Общая информация для кнопок либо текст из файла
+    prev_button = get_button_prev(path)  # Кнопка "назад" В той функции решает нужна она или нет и какая будет
     keyboard.add(*buttons)
-    if prev_button:
-        keyboard.add(*prev_button)
+    if prev_button:  # Если есть необходимость
+        keyboard.add(*prev_button)  # то добавить
     return description, keyboard
