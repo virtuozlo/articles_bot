@@ -11,6 +11,9 @@
 Получить токен бота телеграмм в [BotFather](https://t.me/BOTSplus/288).
 
 Создать файл .env и внести необходимые переменные согласно шаблону .env.template
+
 PATH_TO_FILES - директория до бота/text_files/
+
 PATH_TO_PHOTO - директория до бота/photo/
+
 
