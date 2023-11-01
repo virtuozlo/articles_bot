@@ -1,0 +1,5 @@
+[postgresql]
+host=localhost
+database=database_name
+user=user_name
+password=password_user_name
