@@ -23,7 +23,7 @@ def reading_menu(call: CallbackQuery) -> None:
     get_photo_request = photo_request(my_data['path_dir'])
     if get_photo_request:  # Здесь будет делаться кнопка дай фото
         keyboard.add(*get_button_photo(my_data['path_dir']))
-    if len(keyboard.keyboard) == 1:
+    if len(keyboard.keyboard) <=2:
         change_db(call.from_user.id, call.from_user.username)
     bot.send_message(chat_id, description, parse_mode='HTML',
                      reply_markup=keyboard)

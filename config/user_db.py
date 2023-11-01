@@ -91,10 +91,10 @@ class UserDb:
                 return cur.fetchone()
 
 
-if __name__ == '__main__':
-    db = UserDb()
-    print(db.connection)
-    db.create_table()
+# if __name__ == '__main__':
+#     db = UserDb()
+#     print(db.connection)
+#     db.create_table()
     #  Examples
     #  db.get_user(user_id) - Выдаст список совпадений (использовать всегда, что бы убедиться что пользователь есть/нет)
     # db.add_user(123124, 'user_name') #- Добавить пользователя, если имени нет, то не беда. Ошибки не будет
