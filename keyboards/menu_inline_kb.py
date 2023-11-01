@@ -1,5 +1,6 @@
+import os.path
 from typing import Tuple, List, Optional
-
+from utils.reader_files import PATH_TO_FILES
 import telebot.types
 from config.logger import logger
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
@@ -24,11 +25,17 @@ def get_button_prev(path: str) -> Optional[List[telebot.types.InlineKeyboardButt
     :param message_id: id сообщения с фото. Отправлен кнопкой "назад" из callback с фото
     :return: preview button
     """
-    path = [i for i in path.split('/') if i]
+    print(f'Принимает на вход для кнопки назад {path}')
     if path:
-        path.pop()
-        return [InlineKeyboardButton('Назад', callback_data=for_start.new(path_dir='/'.join(path) + '/'))]
+        path = path.split('\\')
+        if path[:len(path)-1]:  # Если осталось куда идти назад
+            path = os.path.join(*path[:len(path)-1])
+        else:
+            path = ''
+        logger.info(f'Получение информации, что путь есть {path}')
+        return [InlineKeyboardButton('Назад', callback_data=for_start.new(path_dir=path))]
     else:
+        logger.info(f'Нет пути назад')
         return None
 
 
@@ -43,7 +50,7 @@ def buttons_choose(path: str) -> Tuple[str, List[InlineKeyboardButton]]:
     buttons = []
     if folder:  # Если была директория
         for button in folder:
-            path_dir = (path + button + '/')
+            path_dir = os.path.join(path, button)
             buttons.append(
                 InlineKeyboardButton(button, callback_data=for_start.new(path_dir=path_dir))
             )

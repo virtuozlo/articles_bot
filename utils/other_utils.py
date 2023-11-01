@@ -4,6 +4,8 @@ from telebot.types import Message, CallbackQuery, InputMediaPhoto
 
 from config.logger import logger
 
+PATH_TO_PHOTO = os.path.join(os.getcwd(), 'photo')
+
 
 def get_msg(msg: Union[Message, CallbackQuery], call: bool = False) -> Union[Tuple[Message, int, int, int], str]:
     """
@@ -29,7 +31,7 @@ def get_set_media(path: str) -> List[InputMediaPhoto]:
     :return: List[фоточки]
     """
     images = []
-    path = os.getenv('PATH_TO_PHOTO') + path
+    path = os.path.join(PATH_TO_PHOTO, path)
     #  Оставить только фото формат .jpg
     list_photo = [i for i in os.listdir(path) if i.endswith(('.jpg', '.JPG'))]
     for image in list_photo:
@@ -46,7 +48,7 @@ def photo_request(path: str) -> bool:
     :return: есть / нет фото
     """
     try:
-        path_photo = os.listdir(os.getenv('PATH_TO_PHOTO') + path)  # Здесь должны быть фото
+        path_photo = os.listdir(os.path.join(PATH_TO_PHOTO, path))  # Здесь должны быть фото
         return any(i for i in path_photo if i.endswith(('.jpg', '.JPG')))
     except FileNotFoundError as e:
         return False

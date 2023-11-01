@@ -2,6 +2,8 @@ from typing import List, Tuple, Optional
 import os
 from config.logger import logger
 
+PATH_TO_FILES = os.path.join(os.getcwd(), 'text_files')
+
 
 def file_reader(filename: str) -> str:
     """
@@ -12,7 +14,7 @@ def file_reader(filename: str) -> str:
     logger.info(' ')
     read_data = ''
     try:
-        with open(os.getenv('PATH_TO_FILES') + filename, encoding='utf-8') as f:
+        with open(os.path.join(PATH_TO_FILES, filename), encoding='utf-8') as f:
             read_data = f.read()
     except Exception as e:
         logger.error(e)
@@ -28,13 +30,12 @@ def directions_list(dir_name: str) -> Tuple[str, Optional[List[str]]]:
     :return:
     """
     logger.info(' ')
-    dir_name = dir_name[:len(dir_name)-1]  # Убрать последний '/' для чтения файла
     #  Это для папок
-    if os.path.isdir(os.getenv("PATH_TO_FILES") + dir_name):
-        tmp_dir_lst = os.listdir(f'{os.getenv("PATH_TO_FILES") + dir_name}')  # Все файлы директории
+    if os.path.isdir(os.path.join(PATH_TO_FILES, dir_name)):
+        tmp_dir_lst = os.listdir(f'{os.path.join(PATH_TO_FILES, dir_name)}')  # Все файлы директории
         dir_lst = [i for i in tmp_dir_lst if i != 'description']
         description = [i for i in tmp_dir_lst if i == 'description']
-        description = file_reader(dir_name + '/' + description[0])
+        description = file_reader(os.path.join(dir_name, description[0]))
     #  Иначе это файл
     else:
         description = file_reader(dir_name)
