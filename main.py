@@ -1,5 +1,6 @@
 from config.loader import bot, bind_filters
 from config.set_default_commands import set_default_commands
+from config.user_db import UserDb
 import handlers
 
 
