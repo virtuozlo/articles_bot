@@ -1,6 +1,7 @@
 from config.loader import bot
 from keyboards.kb_filters import *
 from keyboards.menu_inline_kb import create_buttons_federal_menu, get_button_photo, get_button_prev
+from utils.change_db import change_db
 from utils.other_utils import get_msg, photo_request, get_set_media
 from config.logger import logger
 from telebot.types import CallbackQuery, InlineKeyboardMarkup
@@ -22,6 +23,8 @@ def reading_menu(call: CallbackQuery) -> None:
     get_photo_request = photo_request(my_data['path_dir'])
     if get_photo_request:  # Здесь будет делаться кнопка дай фото
         keyboard.add(*get_button_photo(my_data['path_dir']))
+    if len(keyboard.keyboard) <=2:
+        change_db(call.from_user.id, call.from_user.username)
     bot.send_message(chat_id, description, parse_mode='HTML',
                      reply_markup=keyboard)
     bot.delete_message(chat_id, message_id)

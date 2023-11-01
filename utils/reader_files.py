@@ -1,5 +1,4 @@
-from typing import List, Tuple, Union, Optional
-from telebot.types import Message, CallbackQuery
+from typing import List, Tuple, Optional
 import os
 from config.logger import logger
 
