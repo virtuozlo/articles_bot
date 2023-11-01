@@ -3,6 +3,7 @@ photo
 config/my_config.py
 *env
 *.db
+*.ini
 about.txt
 # Byte-compiled / optimized / DLL files
 __pycache__/
