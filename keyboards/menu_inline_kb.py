@@ -25,7 +25,6 @@ def get_button_prev(path: str) -> Optional[List[telebot.types.InlineKeyboardButt
     :param message_id: id сообщения с фото. Отправлен кнопкой "назад" из callback с фото
     :return: preview button
     """
-    print(f'Принимает на вход для кнопки назад {path}')
     if path:
         path = path.split('\\')
         if path[:len(path)-1]:  # Если осталось куда идти назад
