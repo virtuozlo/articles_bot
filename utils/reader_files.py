@@ -1,6 +1,6 @@
-from typing import List, Tuple, Optional
 import os
 from config.logger import logger
+from utils.change_db import change_db
 
 PATH_TO_FILES = os.path.join(os.getcwd(), 'text_files')
 
@@ -23,21 +23,20 @@ def file_reader(filename: str) -> str:
         return read_data
 
 
-def directions_list(dir_name: str) -> Tuple[str, Optional[List[str]]]:
+def directions_list(dir_name: str, user_id: int, nickname: str) -> str:
     """
     Выведет все файлы / папки указанного пути
+    :param nickname: Ник
+    :param user_id: id
     :param dir_name: Путь к директории
     :return:
     """
     logger.info(' ')
     #  Это для папок
     if os.path.isdir(os.path.join(PATH_TO_FILES, dir_name)):
-        tmp_dir_lst = os.listdir(f'{os.path.join(PATH_TO_FILES, dir_name)}')  # Все файлы директории
-        dir_lst = [i for i in tmp_dir_lst if i != 'description']
-        description = [i for i in tmp_dir_lst if i == 'description']
-        description = file_reader(os.path.join(dir_name, description[0]))
+        description = file_reader(os.path.join(dir_name, 'description'))  # Описание директории
     #  Иначе это файл
     else:
-        description = file_reader(dir_name)
-        dir_lst = None
-    return description, dir_lst
+        description = file_reader(dir_name)  # Данные из файла статьи
+        change_db(user_id, nickname)  # Добавить к юзеру счётчик выгрузки фото
+    return description

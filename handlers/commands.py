@@ -1,7 +1,6 @@
 from config.loader import bot
 from config.logger import logger
-from keyboards.menu_inline_kb import create_buttons_federal_menu
-from utils.other_utils import get_msg
+from utils.other_utils import get_descr_and_keyboard
 from telebot.types import Message
 
 
@@ -11,14 +10,12 @@ def send_welcome(message: Message) -> None:
     Отправляет в фабрику кнопок path в виде '/', что означает выбрать первую директорию
     :param message:
     """
-    message, user_id, chat_id, message_id = get_msg(message)
-    logger.info(f'{user_id}')
-    description, keyboard = create_buttons_federal_menu('')
-    bot.send_message(chat_id, description, parse_mode='HTML',
+    logger.info(f'{message.from_user.id} в меню')
+    description, keyboard = get_descr_and_keyboard('', message)
+    bot.send_message(message.chat.id, description, parse_mode='HTML',
                      reply_markup=keyboard)
 
 
 @bot.message_handler(commands=['help'])
 def send_keyboard(message):
-    message, user_id, chat_id, message_id = get_msg(message)
-    bot.send_message(chat_id, 'Бот тестируется и дополняется')
+    bot.send_message(message.chat.id, 'Бот тестируется и дополняется')
