@@ -1,20 +1,29 @@
 import os.path
-from typing import Tuple, List, Optional
-from utils.reader_files import PATH_TO_FILES
+from typing import List, Optional
 import telebot.types
 from config.logger import logger
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 from .kb_filters import for_start, for_photo
-from utils.reader_files import directions_list
+
+PATH_TO_FILES = os.path.join(os.getcwd(), 'text_files')
+PATH_TO_PHOTO = os.path.join(os.getcwd(), 'photo')
 
 
-def get_button_photo(path: str) -> List[InlineKeyboardButton]:
+def get_button_photo(path: str) -> Optional[List[InlineKeyboardButton]]:
     """
     Создать кнопку получения фото с CallBackData для фото
     :param path:
     :return:
     """
-    return [InlineKeyboardButton('Загрузить фото', callback_data=for_photo.new(path_dir=path))]
+    logger.info(f'{path}')
+    try:
+        path_photo = os.listdir(os.path.join(PATH_TO_PHOTO, path))  # Здесь должны быть фото
+        if any(i for i in path_photo if i.endswith(('.jpg', '.JPG'))):
+            return [InlineKeyboardButton('Загрузить фото', callback_data=for_photo.new(path_dir=path))]
+    except FileNotFoundError as e:
+        return None
+    except OSError as e:  # Значит идёт выгрузка фото
+        return None
 
 
 def get_button_prev(path: str) -> Optional[List[telebot.types.InlineKeyboardButton]]:
@@ -27,44 +36,50 @@ def get_button_prev(path: str) -> Optional[List[telebot.types.InlineKeyboardButt
     """
     if path:
         path = path.split('\\')
-        if path[:len(path)-1]:  # Если осталось куда идти назад
-            path = os.path.join(*path[:len(path)-1])
+        if path[:len(path) - 1]:  # Если осталось куда идти назад
+            text = path[:len(path) - 1][-1]
+            path = os.path.join(*path[:len(path) - 1])
         else:
             path = ''
-        logger.info(f'Получение информации, что путь есть {path}')
-        return [InlineKeyboardButton('Назад', callback_data=for_start.new(path_dir=path))]
+            text = 'в меню'
+        logger.info(f' ')
+        return [InlineKeyboardButton(f'Назад --> {text}', callback_data=for_start.new(path_dir=path))]
     else:
-        logger.info(f'Нет пути назад')
+        logger.info(f' ')
         return None
 
 
-def buttons_choose(path: str) -> Tuple[str, List[InlineKeyboardButton]]:
+def buttons_choose(path: str) -> Optional[List[InlineKeyboardButton]]:
     """
-    Разбирает path, который состоит из списка с названиями папок
-    :param path: Список файлов (вложенных и текущего)
+    :param path: Текущий путь
     :return: list of buttons
     """
     logger.info(' ')
-    description, folder = directions_list(path)
     buttons = []
-    if folder:  # Если была директория
+    if os.path.isdir(os.path.join(PATH_TO_FILES, path)):  # Если это директория
+        folder = os.listdir(os.path.join(PATH_TO_FILES, path))
+        folder = [i for i in folder if i != 'description']  # то убрать description
         for button in folder:
             path_dir = os.path.join(path, button)
             buttons.append(
                 InlineKeyboardButton(button, callback_data=for_start.new(path_dir=path_dir))
             )
-    return description, buttons
+        return buttons
+    return None  # Если это файл
 
 
-def create_buttons_federal_menu(path) -> Tuple[str, telebot.types.InlineKeyboardMarkup]:
+def create_keyboard_menu(path) -> telebot.types.InlineKeyboardMarkup:
     """
     Создать кнопки для команды ФЗ
     """
     logger.info(' ')
     keyboard = InlineKeyboardMarkup()
-    description, buttons = buttons_choose(path)  # Вернет desr - Общая информация для кнопок либо текст из файла
+    buttons = buttons_choose(path)  # Вернет кнопки, если это директория
+    if buttons:
+        keyboard.add(*buttons)
+    if get_button_photo(path):
+        keyboard.add(*get_button_photo(path))
     prev_button = get_button_prev(path)  # Кнопка "назад" В той функции решает нужна она или нет и какая будет
-    keyboard.add(*buttons)
     if prev_button:  # Если есть необходимость
         keyboard.add(*prev_button)  # то добавить
-    return description, keyboard
+    return keyboard

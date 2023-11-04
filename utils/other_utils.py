@@ -1,32 +1,28 @@
 import os
 from typing import Tuple, Union, List
-from telebot.types import Message, CallbackQuery, InputMediaPhoto
-
-from config.logger import logger
+from telebot.types import Message, CallbackQuery, InputMediaPhoto, InlineKeyboardMarkup
+from utils.reader_files import directions_list
+from keyboards.menu_inline_kb import create_keyboard_menu
 
 PATH_TO_PHOTO = os.path.join(os.getcwd(), 'photo')
 
 
-def get_msg(msg: Union[Message, CallbackQuery], call: bool = False) -> Union[Tuple[Message, int, int, int], str]:
+def get_descr_and_keyboard(path: str, msg: Union[CallbackQuery, Message]) -> Tuple[str, InlineKeyboardMarkup]:
     """
-    Функция примет request(msg \ call)
-    Вернёт msg / id_user и прочее
-    :param msg:
-    :param call:
-    :return:
+    :param msg: msg telebot
+    :param path: Текущая директория
+    :return: tuple[str, InlineKeyboard]
     """
-    try:
-        msg = msg.message if call else msg
-    except Exception as e:
-        logger.error(e)
     user_id = msg.from_user.id
-    chat_id = msg.chat.id
-    message_id = msg.id
-    return msg, user_id, chat_id, message_id
+    nickname = msg.from_user.username
+    description = directions_list(path, user_id, nickname)  # Взять оттуда description
+    keyboard = create_keyboard_menu(path)
+    return description, keyboard
 
 
 def get_set_media(path: str) -> List[InputMediaPhoto]:
     """
+    Список фоток для выгрузки тлг
     :param path: путь до папки с фото
     :return: List[фоточки]
     """
@@ -36,19 +32,6 @@ def get_set_media(path: str) -> List[InputMediaPhoto]:
     list_photo = [i for i in os.listdir(path) if i.endswith(('.jpg', '.JPG'))]
     for image in list_photo:
         images.append(InputMediaPhoto(
-            media=open(path + '/' + image, 'rb')
+            media=open(os.path.join(path, image), 'rb')
         ))
     return images
-
-
-def photo_request(path: str) -> bool:
-    """
-    Проверить, есть ли в текущей директории фото
-    :param path: Текущий путь
-    :return: есть / нет фото
-    """
-    try:
-        path_photo = os.listdir(os.path.join(PATH_TO_PHOTO, path))  # Здесь должны быть фото
-        return any(i for i in path_photo if i.endswith(('.jpg', '.JPG')))
-    except FileNotFoundError as e:
-        return False
