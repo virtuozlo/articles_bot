@@ -11,7 +11,7 @@ def send_welcome(message: Message) -> None:
     :param message:
     """
     logger.info(f'{message.from_user.id} в меню')
-    description, keyboard = get_descr_and_keyboard('', message)
+    description, keyboard = get_descr_and_keyboard('', message.from_user.id, message.from_user.username)
     bot.send_message(message.chat.id, description, parse_mode='HTML',
                      reply_markup=keyboard)
 

@@ -19,7 +19,7 @@ def reading_menu(call: CallbackQuery) -> None:
     """
     my_data = for_start.parse(callback_data=call.data)
     logger.info(f'{call.message.from_user.id} колупается в меню')
-    description, keyboard = get_descr_and_keyboard(my_data['path_dir'], call)
+    description, keyboard = get_descr_and_keyboard(my_data['path_dir'], call.from_user.id,call.from_user.username)
     bot.send_message(call.message.chat.id, description, parse_mode='HTML',
                      reply_markup=keyboard)
     bot.delete_message(call.message.chat.id, call.message.id)
@@ -31,7 +31,7 @@ def get_photo(call: CallbackQuery) -> None:
     my_data = for_photo.parse(callback_data=call.data)
     photos = get_set_media(my_data['path_dir'])  # Возврат списка с tlg-фото
     text = my_data['path_dir'].split('\\')[-1]  # Текущий файл с фото
-    description, keyboard = get_descr_and_keyboard(my_data['path_dir'], call)
+    description, keyboard = get_descr_and_keyboard(my_data['path_dir'], call.from_user.id,call.from_user.username)
     bot.send_media_group(call.message.chat.id,
                          media=photos, protect_content=True)
     bot.send_message(call.message.chat.id, text, reply_markup=keyboard)

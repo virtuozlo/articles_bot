@@ -54,6 +54,7 @@ def buttons_choose(path: str) -> Optional[List[InlineKeyboardButton]]:
     :param path: Текущий путь
     :return: list of buttons
     """
+    print(PATH_TO_FILES)
     logger.info(' ')
     buttons = []
     if os.path.isdir(os.path.join(PATH_TO_FILES, path)):  # Если это директория
