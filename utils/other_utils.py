@@ -7,14 +7,13 @@ from keyboards.menu_inline_kb import create_keyboard_menu
 PATH_TO_PHOTO = os.path.join(os.getcwd(), 'photo')
 
 
-def get_descr_and_keyboard(path: str, msg: Union[CallbackQuery, Message]) -> Tuple[str, InlineKeyboardMarkup]:
+def get_descr_and_keyboard(path: str, user_id: int, nickname: str) -> Tuple[str, InlineKeyboardMarkup]:
     """
-    :param msg: msg telebot
+    :param nickname: user_name
+    :param user_id: user_id
     :param path: Текущая директория
     :return: tuple[str, InlineKeyboard]
     """
-    user_id = msg.from_user.id
-    nickname = msg.from_user.username
     description = directions_list(path, user_id, nickname)  # Взять оттуда description
     keyboard = create_keyboard_menu(path)
     return description, keyboard
