@@ -5,14 +5,24 @@ from config.user_db import UserDb
 
 
 class TestChangeDB(unittest.TestCase):
-    def setUp(self):
-        self.db = UserDb()
-        self.user_id = 123
-        self.username = 'username'
+    @classmethod
+    def setUpClass(cls):
+        cls.db = UserDb()
+        cls.user_id = 123
+        cls.username = 'username'
+
+    @classmethod
+    def tearDownClass(cls):
+        db = UserDb()
+        with db.connection as conn:
+            with conn.cursor() as cur:
+                return cur.execute("""
+                DELETE FROM users WHERE user_id = 123
+                """)
 
     def test_add_change_db(self):
         """
-        Работоспособность функции добавления пользвателя
+        Работоспособность функции добавления пользователя
         :return:
         """
         change_db(self.user_id, self.username)

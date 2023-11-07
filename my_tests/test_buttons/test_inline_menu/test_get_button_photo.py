@@ -7,13 +7,28 @@ from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 
 class TestKeyboards(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.user_id = 123
+        cls.username = 'username'
+        os.mkdir(os.path.join(os.getcwd(), 'photo', 'ex_dir'))
+        os.mkdir(os.path.join(os.getcwd(), 'photo', 'ex_dir', 'ex_subdir'))
+        with open(os.path.join(os.getcwd(), 'photo', 'ex_dir', 'ex_subdir', 'example.jpg'), 'w') as file:
+            file.close()
+
+    @classmethod
+    def tearDownClass(cls):
+        os.remove(os.path.join(os.getcwd(), 'photo', 'ex_dir', 'ex_subdir', 'example.jpg'))
+        os.rmdir(os.path.join(os.getcwd(), 'photo', 'ex_dir', 'ex_subdir'))
+        os.rmdir(os.path.join(os.getcwd(), 'photo', 'ex_dir'))
+
     def test_get_button_photo(self):
         """
         Проверить возвращение кнопки фото при условии, что фото есть
         :return:
         """
 
-        button = get_button_photo(os.path.join('Медицина'))
+        button = get_button_photo(os.path.join('ex_dir', 'ex_subdir'))
         self.assertTrue(isinstance(button[0], InlineKeyboardButton))
 
     def test_not_get_button_photo(self):
@@ -29,8 +44,8 @@ class TestKeyboards(unittest.TestCase):
         Поднялись на один вверх
         :return:
         """
-        path = get_button_prev(os.path.join('Медицина', 'Аптечки'))
-        self.assertNotIn('Аптечки', path[0].text)
+        path = get_button_prev(os.path.join('ex_dir', 'ex_subdir'))
+        self.assertNotIn('ex_subdir', path[0].text)
 
     def test_not_prev(self):
         """
@@ -53,7 +68,7 @@ class TestKeyboards(unittest.TestCase):
         Проверить возврат None если задан путь к файлу
         :return:
         """
-        not_button = buttons_choose(os.path.join('text_files', 'Медицина', 'description'))
+        not_button = buttons_choose(os.path.join('ex_dir', 'ex_subdir', 'example.jpg'))
         self.assertFalse(not_button)
 
     def test_get_keyboard(self):

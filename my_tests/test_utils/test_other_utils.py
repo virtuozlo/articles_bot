@@ -7,20 +7,26 @@ import json
 
 
 class TestInputMedia(unittest.TestCase):
-    def setUp(self):
-        self.user_id = 12345
-        self.username = 'username'
-        # self.photo_set = []
-        # self.photo = InputMediaPhoto(media=open((os.path.join(os.getcwd(), 'for_test_photo.jpg')), 'rb'))
-        # for _ in range(5):
-        #     self.photo_set.append(self.photo)
+    @classmethod
+    def setUpClass(cls):
+        cls.user_id = 123
+        cls.username = 'username'
+        os.mkdir(os.path.join(os.getcwd(), 'photo', 'ex_dir'))
+        os.mkdir(os.path.join(os.getcwd(), 'photo', 'ex_dir', 'ex_subdir'))
+        with open(os.path.join(os.getcwd(), 'photo', 'ex_dir', 'ex_subdir', 'example.jpg'), 'w') as file:
+            file.close()
+
+    @classmethod
+    def tearDownClass(cls):
+        os.remove(os.path.join(os.getcwd(), 'photo', 'ex_dir', 'ex_subdir', 'example.jpg'))
+        os.rmdir(os.path.join(os.getcwd(), 'photo', 'ex_dir', 'ex_subdir'))
+        os.rmdir(os.path.join(os.getcwd(), 'photo', 'ex_dir'))
 
     def test_get_set_media(self):
-        result = get_set_media(os.path.join('Общее', 'Паспорта'))
+        result = get_set_media(os.path.join('ex_dir', 'ex_subdir'))
         self.assertTrue(isinstance(result[0], InputMediaPhoto))
 
     def test_get_descr_and_keyboard(self):
-        descr, kb = get_descr_and_keyboard('', 12345,'name')
-        self.assertTrue(isinstance(descr,str))
+        descr, kb = get_descr_and_keyboard('', self.user_id, self.username)
+        self.assertTrue(isinstance(descr, str))
         self.assertTrue(isinstance(kb, InlineKeyboardMarkup))
-
