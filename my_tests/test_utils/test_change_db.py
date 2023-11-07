@@ -1,9 +1,11 @@
 import unittest
 import psycopg2
+import os
 from utils.change_db import change_db
 from config.user_db import UserDb
 
 
+@unittest.skipIf(not os.path.exists(os.path.join('database.ini')), 'Нет файла базы данных')
 class TestChangeDB(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -14,11 +16,13 @@ class TestChangeDB(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         db = UserDb()
-        with db.connection as conn:
-            with conn.cursor() as cur:
-                return cur.execute("""
-                DELETE FROM users WHERE user_id = 123
-                """)
+        print(type(db))
+        if db:
+            with db.connection as conn:
+                with conn.cursor() as cur:
+                    return cur.execute("""
+                    DELETE FROM users WHERE user_id = 123
+                    """)
 
     def test_add_change_db(self):
         """

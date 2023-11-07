@@ -11,6 +11,21 @@ class TestInputMedia(unittest.TestCase):
     def setUpClass(cls):
         cls.user_id = 123
         cls.username = 'username'
+        try:
+            os.mkdir(os.path.join(os.getcwd(), 'photo'))
+        except FileExistsError:
+            pass
+        try:
+            os.mkdir(os.path.join(os.getcwd(), 'text_files'))
+            with open(os.path.join(os.getcwd(), 'text_files', 'description'),'w') as file:
+                file.write('test')
+        except FileExistsError:
+            pass
+        os.mkdir(os.path.join(os.getcwd(), 'text_files', 'ex_dir'))
+        with open(os.path.join(os.getcwd(), 'text_files', 'ex_dir', 'description'),'w') as file:
+            file.write('test')
+        with open(os.path.join(os.getcwd(), 'text_files', 'ex_dir', 'example'),'w') as file:
+            file.write('test')
         os.mkdir(os.path.join(os.getcwd(), 'photo', 'ex_dir'))
         os.mkdir(os.path.join(os.getcwd(), 'photo', 'ex_dir', 'ex_subdir'))
         with open(os.path.join(os.getcwd(), 'photo', 'ex_dir', 'ex_subdir', 'example.jpg'), 'w') as file:
@@ -19,6 +34,9 @@ class TestInputMedia(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         os.remove(os.path.join(os.getcwd(), 'photo', 'ex_dir', 'ex_subdir', 'example.jpg'))
+        os.remove(os.path.join(os.getcwd(), 'text_files', 'ex_dir', 'description'))
+        os.remove(os.path.join(os.getcwd(), 'text_files', 'ex_dir', 'example'))
+        os.rmdir(os.path.join(os.getcwd(), 'text_files', 'ex_dir'))
         os.rmdir(os.path.join(os.getcwd(), 'photo', 'ex_dir', 'ex_subdir'))
         os.rmdir(os.path.join(os.getcwd(), 'photo', 'ex_dir'))
 
